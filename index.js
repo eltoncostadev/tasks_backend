@@ -11,7 +11,30 @@ consign()
 
 app.db = db
 
-app.get('/', (req, res) => {
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+// Extended: https://swagger.io/specification/#infoObject
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: "Tasks API",
+            description: "Tasks API Information",
+            contact: {
+                name: "Elton Costa"
+            },
+            servers: ["http://localhost:3000"]
+        }
+    },
+    // ['.routes/*.js']
+    //apis: ["index.js"]
+    apis: ['./api/*.js', './config/routes.js']
+}
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions)
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
+app.get('/teste', (req, res) => {
     res.status(200).send('Meu backend!')
 })
 
